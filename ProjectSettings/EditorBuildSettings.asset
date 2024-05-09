@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: a70555acf0da349a181e6916c223e0f6
+  - enabled: 1
+    path: Assets/Scenes/1 - Campfire.unity
+    guid: f7c9169fed1fa4373aab614874bcfcc5
   m_configObjects: {}
