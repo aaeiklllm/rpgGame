@@ -12,6 +12,7 @@ public class Mentor : MonoBehaviour
     public LayerMask whatIsGround, whatIsPlayer;
     public float chaseSpeed;
     public float health;
+    
 
     //animation
     private Animator animator;
@@ -21,6 +22,8 @@ public class Mentor : MonoBehaviour
     //attacking
     public float timeBetweenAttacks;
     bool isAttacking;
+    private int lastAttackIndex = -1;
+    public float rotationSpeed = 20f;
 
      //states
     public float sightRange, attackRange;
@@ -28,21 +31,32 @@ public class Mentor : MonoBehaviour
 
     private void Awake()
     {
+        attackTriggers = new string[] { "Attacking1", "Attacking2", "Attacking3", "Attacking4" };
         player = GameObject.Find("Skeleton").transform;
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
-        attackTriggers = new string[] { "Attacking1", "Attacking2", "Attacking3", "Attacking4" };
+        animator = agent.GetComponent<Animator>();
+        
     }
 
     private void Update()
     {
-        
+
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer); //vector3 center, radius of sightrange, layermask 
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer); //performs collision check
 
-        if (!playerInSightRange && !playerInAttackRange && agent.remainingDistance <= agent.stoppingDistance) Idle();
-        if (playerInSightRange && !playerInAttackRange) ChasePlayer();
-        if (playerInAttackRange && playerInSightRange) AttackPlayer();
+        if (!playerInSightRange && !playerInAttackRange)
+        {
+            Idle();
+        }
+        else if (playerInSightRange && !playerInAttackRange)
+        {
+            ChasePlayer();
+        }
+        else if (playerInAttackRange && playerInSightRange)
+        {
+            AttackPlayer();
+        }
+        
 
     }
 
@@ -53,37 +67,62 @@ public class Mentor : MonoBehaviour
 
     private void ChasePlayer()
     {
-        agent.SetDestination(player.position);
         animator.SetBool("isWalking", true);
-        agent.speed = chaseSpeed; 
+        Vector3 directionToPlayer = player.position - transform.position;
+        directionToPlayer.y = 0f; 
+        Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
      private void AttackPlayer()
     {
-        agent.SetDestination(transform.position); //mordon doesn't move while attacking
-        transform.LookAt(player); //add code when player is jumping
-
+         animator.SetBool("isWalking", false);
         if (playerInAttackRange)
         {
-            if (!isAttacking)
+            Vector3 targetDirection = (player.position - transform.position).normalized;
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
+             if (!isAttacking && Vector3.Dot(transform.forward, targetDirection) > 0)
             {
+                animator.SetBool("isBlocking", false);
                 isAttacking = true;
-                randomIndex = Random.Range(0, attackTriggers.Length);
+                int nextIndex = GetNextAttackIndex();
+                randomIndex = nextIndex;
                 Debug.Log(randomIndex);
+
                 animator.SetTrigger(attackTriggers[randomIndex]);
-                animator.SetBool("isWalking", false);
                 Invoke(nameof(ResetAttack), timeBetweenAttacks);
+            }
+
+            else{
+                 animator.SetBool("isBlocking", true);
             }
         }
         else{
             ResetAttack();
-        }
+        } 
+    }
+
+    private int GetNextAttackIndex()
+    {
+    int nextIndex = Random.Range(0, attackTriggers.Length);
+    
+    while (nextIndex == lastAttackIndex)
+    {
+        nextIndex = Random.Range(0, attackTriggers.Length);
+    }
+
+    lastAttackIndex = nextIndex;
+    return nextIndex;
     }
 
     private void ResetAttack()
     {
         animator.ResetTrigger(attackTriggers[randomIndex]);
+        animator.SetBool("isBlocking", false);
         isAttacking = false;
+
     }
 
     public void TakeDamage(int damage)
