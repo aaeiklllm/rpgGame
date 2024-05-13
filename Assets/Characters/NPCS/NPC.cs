@@ -62,8 +62,7 @@ public class NPC : MonoBehaviour
     void InteractWithNPC()
     {
         animator.SetBool("isTalking", true);
-        DialogueTrigger dialogueTrigger = GetComponent
-        <DialogueTrigger>();
+        DialogueTrigger dialogueTrigger = GetComponent<DialogueTrigger>();
         dialogueTrigger.TriggerDialogue();   
     }
     
