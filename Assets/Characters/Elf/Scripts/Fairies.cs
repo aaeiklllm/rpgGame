@@ -32,7 +32,7 @@ public class Fairies : MonoBehaviour
     private void Awake()
     {
         anim = GetComponent<Animation>();
-        player = GameObject.Find("Capsule").transform;
+        player = GameObject.Find("PlayerArmature").transform;
         agent = GetComponent<NavMeshAgent>();
     }
 
