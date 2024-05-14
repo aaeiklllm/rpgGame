@@ -6,20 +6,33 @@ public class ElrianAttack : MonoBehaviour
 {
     public Transform player;
     public GameObject magicProjectile; 
-    public float attackInterval = 7f;
+    private float attackInterval = 8.0f;
+    private bool isAttacking = false;
+    private bool intervalSet = false;
 
-
-    void Start()
+     void Update()
     {
-        StartCoroutine(AttackPlayer());
+        int destroyedCount = CrystalAnimation.destroyedCrystalCount; 
+        if (destroyedCount > 3 && !intervalSet)
+        {
+            attackInterval = 4.0f;
+            intervalSet = true;
+        }
+
+        if (destroyedCount > 2 && !isAttacking)
+        {
+            StartCoroutine(AttackPlayer());
+        }
     }
 
      IEnumerator AttackPlayer()
     {
+        isAttacking = true;
+        
         while (true)
         {
             yield return new WaitForSeconds(attackInterval);
-            
+            Debug.Log(attackInterval);
             transform.LookAt(player);
 
             GameObject projectile = Instantiate(magicProjectile, transform.position, Quaternion.identity);

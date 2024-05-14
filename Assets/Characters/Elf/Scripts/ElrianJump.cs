@@ -7,6 +7,9 @@ public class ElrianJump : MonoBehaviour
     public GameObject[] magicEffects;
     private int currentPositionIndex = 0; 
     private int lastPositionIndex = 0; 
+    public ParticleSystem barrier;
+    private bool intervalSet = false;
+    private float jumpInterval = 10.0f;
 
     [System.Serializable]
     public struct PositionData
@@ -22,17 +25,31 @@ public class ElrianJump : MonoBehaviour
         transform.position = jumpPositions[currentPositionIndex].position;
         ApplyRotationY(jumpPositions[currentPositionIndex].rotationY);
         ActivateMagicEffect(currentPositionIndex);
-        StartCoroutine(MoveCharacterEveryFiveSeconds()); //coroutine lets you execute code several times
-
+        StartCoroutine(MoveCharacter()); //coroutine lets you execute code several times
     }
 
-    IEnumerator MoveCharacterEveryFiveSeconds() //coroutines implemented using this
+     void Update()
+    {
+        int destroyedCount = CrystalAnimation.destroyedCrystalCount; 
+        if (destroyedCount > 3 && !intervalSet)
+        {
+            jumpInterval = 5.0f;
+            intervalSet = true;
+        }
+    }
+
+    IEnumerator MoveCharacter() //coroutines implemented using this
     {
         while (true)
         {
-            yield return new WaitForSeconds(5f); //wait for 5 seconds before continuing execution
+            Debug.Log("Start particle system");
+            barrier.Play();
+
+            yield return new WaitForSeconds(jumpInterval); //wait for 10 seconds before continuing execution
             currentPositionIndex = (currentPositionIndex + 1) % jumpPositions.Length;
             lastPositionIndex = (currentPositionIndex == 0) ? jumpPositions.Length - 1 : currentPositionIndex - 1;
+            Debug.Log("Stop particle system");
+            barrier.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
 
             DeactivateAllMagicEffects();
             ActivateMagicEffect(currentPositionIndex);

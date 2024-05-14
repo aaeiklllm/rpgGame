@@ -18,7 +18,7 @@ public class Fairies : MonoBehaviour
     //patroling
     public Vector3 walkPoint;
     bool walkPointSet;
-    public float walkPointRange = 5;
+    public float walkPointRange;
 
     //attacking
     public float timeBetweenAttacks;

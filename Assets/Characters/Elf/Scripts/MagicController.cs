@@ -4,22 +4,33 @@ using UnityEngine;
 
 public class MagicController : MonoBehaviour
 {
-     public GameObject magicPrefab;
+    public GameObject magicPrefab;
+    public Transform playerTransform;
+    private bool isSpawning = false;
     
-    void Start()
+    void Update()
     {
-        StartCoroutine(SpawnMagic());
+        int destroyedCount = CrystalAnimation.destroyedCrystalCount; 
+        if (destroyedCount > 1 && !isSpawning)
+        {
+            StartCoroutine(SpawnMagic());
+        }
     }
 
      IEnumerator SpawnMagic()
     {
+        isSpawning = true;
+
         while (true)
         {
-            // wait for 10 seconds
-            yield return new WaitForSeconds(2f);
-            Vector3 randomPosition = new Vector3(Random.Range(-3f, 50f), 0f, Random.Range(-10f, 50f));
-            GameObject magicObject = Instantiate(magicPrefab, randomPosition, Quaternion.identity);
-            Destroy(magicObject, 3f);
+            {
+                Debug.Log("magic explosions");
+                yield return new WaitForSeconds(5f);  
+                Vector3 playerPosition = playerTransform.position;
+                Vector3 spawnPosition = playerPosition;
+                GameObject magicObject = Instantiate(magicPrefab, spawnPosition, Quaternion.identity);
+                Destroy(magicObject, 3f);
+            }
         }
     }
 }

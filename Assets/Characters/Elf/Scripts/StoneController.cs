@@ -22,13 +22,18 @@ public class StoneController : MonoBehaviour
    
     private void Update()
     {
-        timer += Time.deltaTime;
+        int destroyedCount = CrystalAnimation.destroyedCrystalCount; 
 
-        if (timer >= interval)
+        if (destroyedCount > 0)
         {
-            MoveStones();
-            timer = 0.0f;
-            currentIndex = (currentIndex + 1) % stones.Length;  // get index of next stone in array
+            timer += Time.deltaTime;
+
+            if (timer >= interval)
+            {
+                MoveStones();
+                timer = 0.0f;
+                currentIndex = (currentIndex + 1) % stones.Length;  // get index of next stone in array
+            }
         }
     }
 
