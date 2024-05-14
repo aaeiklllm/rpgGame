@@ -9,14 +9,14 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - PlayerAttack
   - Water
   - UI
   - whatIsGround
   - whatIsPlayer
   - whatIsEnemy
   - Offsets
-  - 
+  - PlayerSword
   - 
   - 
   - 

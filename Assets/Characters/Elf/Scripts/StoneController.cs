@@ -8,7 +8,17 @@ public class StoneController : MonoBehaviour
     public float yOffset = 5.0f; // offset to adjust Y position
     private int currentIndex = 0; // index of the stone to move up
     private float timer = 0.0f;
-    public float interval = 10.0f; // interval of stone spawn 
+    public float interval = 15.0f; // interval of stone spawn 
+    private Dictionary<GameObject, Vector3> originalPositions; // store original positions
+
+    private void Start()
+    {
+        originalPositions = new Dictionary<GameObject, Vector3>();
+        foreach (GameObject stone in stones)
+        {
+            originalPositions[stone] = stone.transform.position;
+        }
+    }
    
     private void Update()
     {
@@ -30,7 +40,7 @@ public class StoneController : MonoBehaviour
             {
                 MoveUpStone(stones[i].transform);
             }
-            else // move other stones down
+            else // move other stones back to their orig position
             {
                 MoveDownStone(stones[i].transform);
             }
@@ -40,12 +50,15 @@ public class StoneController : MonoBehaviour
     private void MoveUpStone(Transform stoneTransform) // the position, rotation, and scale of a gameobject
     {
         Vector3 targetPosition = stoneTransform.position + new Vector3(0.0f, yOffset, 0.0f);
+        // Vector3 targetPosition = new Vector3(stoneTransform.position.x, yOffset, stoneTransform.position.z);
         StartCoroutine(MoveStoneCoroutine(stoneTransform, targetPosition, 3.0f)); //3.0 duration from start to target position 
     }
 
     private void MoveDownStone(Transform stoneTransform)
     {
-        Vector3 targetPosition = new Vector3(stoneTransform.position.x, 5.0f, stoneTransform.position.z);
+        // Vector3 targetPosition = new Vector3(stoneTransform.position.x, 25.0f, stoneTransform.position.z);
+        // Vector3 targetPosition = stoneTransform.position - new Vector3(0.0f, yOffset, 0.0f);
+        Vector3 targetPosition = originalPositions[stoneTransform.gameObject];
         StartCoroutine(MoveStoneCoroutine(stoneTransform, targetPosition, 3.0f));
     }
 
