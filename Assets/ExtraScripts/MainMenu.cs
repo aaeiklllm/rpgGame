@@ -2,11 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
 
     private const string SceneIndexKey = "LastSceneIndexPlayed";
+    public Button loadSavedSceneButton;
+    public SaveState saveState;
+
+    private void Start()
+    {
+        CheckSavedScene();
+    }
 
     public void PlayGame()
     {
@@ -15,8 +23,7 @@ public class MainMenu : MonoBehaviour
 
     public void LoadGame()
     {
-        int lastSceneIndex = PlayerPrefs.GetInt(SceneIndexKey, 0);
-        SceneManager.LoadScene(lastSceneIndex);
+        saveState.LoadSavedScene();
     }
 
      private void SaveLastSceneIndex()
@@ -29,6 +36,18 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Quit Game");
         Application.Quit();
+    }
+
+    private void CheckSavedScene()
+    {
+        if (saveState.isThereSavedScene())
+        {
+            loadSavedSceneButton.interactable = true; 
+        }
+        else
+        {
+            loadSavedSceneButton.interactable = false; 
+        }
     }
 }
 

@@ -1,21 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using StarterAssets;
+
 
 public class ElrianAttack : MonoBehaviour
 {
     public Transform player;
-    public GameObject magicProjectile; 
-    private float attackInterval = 8.0f;
+    public ThirdPersonController playerPrefab;
+    public Projectile projectile; 
+    private float attackInterval = 4.0f;
     private bool isAttacking = false;
     private bool intervalSet = false;
+
+    // void Start() //testing purposes
+    // {
+    //     StartCoroutine(AttackPlayer());
+    // }
 
      void Update()
     {
         int destroyedCount = CrystalAnimation.destroyedCrystalCount; 
         if (destroyedCount > 3 && !intervalSet)
         {
-            attackInterval = 4.0f;
+            attackInterval = 2.0f;
             intervalSet = true;
         }
 
@@ -32,15 +40,21 @@ public class ElrianAttack : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(attackInterval);
-            Debug.Log(attackInterval);
+            // Debug.Log(attackInterval);
             transform.LookAt(player);
 
-            GameObject projectile = Instantiate(magicProjectile, transform.position, Quaternion.identity);
-            Rigidbody rb = projectile.GetComponent<Rigidbody>();
-            rb.AddForce(transform.forward * 20f, ForceMode.Impulse);
-            rb.AddForce(transform.up * 0.5f, ForceMode.Impulse);
+            ThirdPersonController clonedPlayer = Instantiate(playerPrefab);
 
-            Destroy(projectile, 2f); //destroy after 2 seconds
+            Projectile magicProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
+            magicProjectile.player = clonedPlayer;
+            magicProjectile.transform.LookAt(player.position); // Ensure the projectile faces the player
+
+            Rigidbody rb = magicProjectile.GetComponent<Rigidbody>();
+            rb.AddForce(magicProjectile.transform.forward * 20f, ForceMode.Impulse);
+            rb.AddForce(magicProjectile.transform.up * 1f, ForceMode.Impulse);
+
+            Destroy(magicProjectile.gameObject, 2f); 
+            Destroy(clonedPlayer.gameObject, 2f);
             
         }
     }

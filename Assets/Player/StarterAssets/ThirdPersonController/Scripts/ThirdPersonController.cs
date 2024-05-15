@@ -126,7 +126,7 @@ namespace StarterAssets
         private float flashTimer; // Timer to track the duration of the flash effect
         private bool isFlashing; // Flag to indicate if the character is currently flashing
 
-        private bool isBlocking = false;
+        public bool isBlocking = false;
 
         public GameObject dagger;
         public ParticleSystem lightning;
@@ -136,6 +136,8 @@ namespace StarterAssets
         public ParticleSystem slashRight;
         public ParticleSystem slashLeft;
         public ParticleSystem slashDown;
+        
+        public PauseMenu pauseMenu;
 
         public float abilityCooldown = 1f; // Cooldown between abilities
         private int currentAbilityIndex = 0; // Index of the current selected ability
@@ -159,6 +161,7 @@ namespace StarterAssets
         public int daggerDamage = 1;
         public int lightningDamage = 5;
         public int healAmount = 3;
+        
         
         // NEW CODE -------------------------------------------------------------------------------------------
 
@@ -474,7 +477,7 @@ namespace StarterAssets
                 }
 
                 // Ability
-                if (Input.GetKeyDown(KeyCode.Q) && !isBlocking && !isAttacking && Time.time >= lastAbilityTime + abilityCooldown)
+                if (Input.GetKeyDown(KeyCode.Q) && !isBlocking && !isAttacking && Time.time >= lastAbilityTime + abilityCooldown && !pauseMenu.isPaused)
                 {
                     UseCurrentAbility();
                 }

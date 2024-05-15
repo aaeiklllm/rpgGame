@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using StarterAssets;
 
 public class CrystalAnimation : MonoBehaviour
 {
+    public ThirdPersonController player; 
     public GameObject Crystal; 
     public GameObject ShatteredCrystal; 
-    private bool isMousePressed = false;
     public static int destroyedCrystalCount = 0;
+    
+    private bool playerIsAttacking = false;
+    private bool attackCollision = false;
+    
 
     void Start()
     {
@@ -16,26 +21,25 @@ public class CrystalAnimation : MonoBehaviour
 
     void Update()
     {
-        isMousePressed = Input.GetKey(KeyCode.Mouse0);
+        playerIsAttacking = player.isAttacking;
+        
+        if (attackCollision) 
+        {
+            Crystal.SetActive(false);
+            ShatteredCrystal.SetActive(true);
+
+            destroyedCrystalCount++;
+
+            attackCollision = false;
+        }
     }
 
 
-    void OnTriggerStay(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-
-        if (other.gameObject.layer == LayerMask.NameToLayer("PlayerSword") && isMousePressed)
+        if (other.gameObject.layer == LayerMask.NameToLayer("PlayerSword") && playerIsAttacking) //layer for destroying crystals only
         {
-            // Debug.Log("Collision with PlayerSword layer and mouse button pressed.");
-
-            if (ShatteredCrystal != null)
-            {
-                Crystal.SetActive(false);
-                ShatteredCrystal.SetActive(true);
-
-                // Debug.Log("Crystal " + Crystal.name + " deactivated.");
-                // Debug.Log("Shattered crystal " + ShatteredCrystal.name + " activated.");
-                destroyedCrystalCount++;
-            }
+            attackCollision = true;
         }
     }
 }
