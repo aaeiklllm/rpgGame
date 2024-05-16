@@ -136,19 +136,24 @@ namespace StarterAssets
         public ParticleSystem slashRight;
         public ParticleSystem slashLeft;
         public ParticleSystem slashDown;
-        
+
         public PauseMenu pauseMenu;
 
         public float abilityCooldown = 1f; // Cooldown between abilities
-        private int currentAbilityIndex = 0; // Index of the current selected ability
-        private float lastAbilityTime = 0f; // Time of the last ability usage
+        public int currentAbilityIndex = 0; // Index of the current selected ability
+        public float lastAbilityTime = 0f; // Time of the last ability usage
 
         public int abilitiesUnlocked = 3;
 
-        public int maxSP = 5;
-        public int skillpoints = 0;
-        public int maxHealth = 10;
-        public int currentHealth = 10;
+        public int maxHealth = 25;
+        public int currentHealth = 25;
+
+        public int currentMana = 0; // Initial mana
+        public int maxMana = 5; // Maximum mana limit
+
+        private int hitCounter = 0; // Counter for tracking hits
+        public int hitsPerMana = 3; // Hits required to gain 1 mana
+
 
         public bool canReceiveInput = true;
         public bool inputReceived;
@@ -157,11 +162,12 @@ namespace StarterAssets
 
         public static ThirdPersonController instance;
 
-        public int slashDamage = 3;
-        public int daggerDamage = 1;
-        public int lightningDamage = 5;
-        public int healAmount = 3;
-        
+        //public int slashDamage = 3;
+        //public int daggerDamage = 1;
+        //public int lightningDamage = 5;
+        public int healAmount = 5;
+
+        public GameObject lightningHitbox; 
         
         // NEW CODE -------------------------------------------------------------------------------------------
 
@@ -476,7 +482,7 @@ namespace StarterAssets
                     barrier.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
                 }
 
-                // Ability
+                //Ability 
                 if (Input.GetKeyDown(KeyCode.Q) && !isBlocking && !isAttacking && Time.time >= lastAbilityTime + abilityCooldown && !pauseMenu.isPaused)
                 {
                     UseCurrentAbility();
@@ -517,6 +523,16 @@ namespace StarterAssets
             }
         }
 
+        public void countHit() 
+        {
+            hitCounter++; // Increment the hit counter
+            if (hitCounter >= hitsPerMana)
+            {
+                currentMana++; // Gain 1 mana
+                hitCounter = 0; // Reset hit counter
+            }
+        }
+
         void UseCurrentAbility()
         {
             // Determine animation trigger based on current ability index
@@ -536,11 +552,13 @@ namespace StarterAssets
                 rb.AddForce(projectile.transform.forward * 20f, ForceMode.Impulse);
 
             }
-            else if (currentAbilityIndex == 1 && skillpoints > 0)
+            else if (currentAbilityIndex == 1 && currentMana > 0)
             {
                 // Heal 
                 _animator.SetTrigger("Cast");
                 healFX.Play(true);
+
+                currentMana--;
 
                 // Calculate the potential new health after healing
                 int newHealth = currentHealth + healAmount;
@@ -557,34 +575,44 @@ namespace StarterAssets
                 // Update the character's current health
                 currentHealth = newHealth;
             }
-            else if (currentAbilityIndex == 2 && skillpoints > 0)
+            else if (currentAbilityIndex == 2 && currentMana > 0)
             {
+                currentMana --;
+
                 // Lightning Burst Attack (Damage around large area, deals high damage)
                 Debug.Log("blast!");
                 _animator.SetTrigger("Cast");
                 lightning.Play(true);
+
+                GameObject blastHitbox = Instantiate(lightningHitbox, transform.position, Quaternion.identity);
+                Destroy(blastHitbox, 0.25f);
             }
             
         }
 
         public void takeDamage(int damageAmount) 
         {
-            currentHealth -= damageAmount;
-
-            StartFlash();
-            // Ensure current health doesn't go below zero
-            if (currentHealth < 0)
+            if (!isBlocking)
             {
-                currentHealth = 0;
-            }
+                currentHealth -= damageAmount;
 
-            Debug.Log("Character took damage. Current Health: " + currentHealth);
-            if (maxHealth <= 0) 
+                Debug.Log("HP: " + currentHealth);
+
+                StartFlash();
+
+                StartFlash();
+                Debug.Log("Character took damage. Current Health: " + currentHealth);
+                if (currentHealth <= 0)
+                {
+                    // Defeat
+                    Debug.Log("Defeated.");
+                }
+            }
+            else
             {
-                // Defeat
-                Debug.Log("Defeated.");
+                // PLAY BLOCK SFX
+                Debug.Log("Blocked");
             }
-
         }
 
         // Method to start the red flash effect

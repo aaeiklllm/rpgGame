@@ -1,6 +1,8 @@
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MentorTutorial : MonoBehaviour
 {
@@ -14,6 +16,12 @@ public class MentorTutorial : MonoBehaviour
     private bool waitingForInput = false;
     private bool shouldCloseDialogueBox = true;
 
+    public ThirdPersonController player;
+
+    public bool daggerTested = false;
+    public bool healTested = false;
+    public bool lightningTested = false;
+
     void Start()
     {
         InteractWithNextDialogueTrigger();
@@ -25,33 +33,60 @@ public class MentorTutorial : MonoBehaviour
         {
             if (dialogueManager.sentences.Count == 0)
             {
-                if (currentDialogueIndex == 1 && Input.GetKey(KeyCode.Space)) //jump
+                if (currentDialogueIndex == 1 && !player.Grounded) //jump
                 {
                     CloseDialogue(); 
                     return;
                 }
 
-                else if (currentDialogueIndex == 2 && Input.GetKey(KeyCode.Mouse0)) //attack
+                else if (currentDialogueIndex == 2 && player.isAttacking) //attack
                 {
                     CloseDialogue(); 
                     return;
                 }
 
-                else if (currentDialogueIndex == 3 && Input.GetKey(KeyCode.Mouse1)) //block
+                else if (currentDialogueIndex == 3 && player.isBlocking) //block
                 {
                     CloseDialogue(); 
                     return;
                 }
 
-                else if (currentDialogueIndex == 4 && Input.GetKey(KeyCode.F)) //skills
+                else if (currentDialogueIndex == 4) //skills
                 {
-                    CloseDialogue(); 
-                    return;
+                    if (Input.GetKeyDown(KeyCode.Q))
+                    {
+                        // called UseCurrentAbility
+
+                        if (player.currentAbilityIndex == 0)
+                        {
+                            // casted dagger
+                            daggerTested = true;
+                        }
+                        else if (player.currentAbilityIndex == 1 && player.currentMana > 0)
+                        {
+                            healTested = true;
+                        }
+                        else if (player.currentAbilityIndex == 2 && player.currentMana > 0)
+                        {
+                            lightningTested = true;
+                        }
+
+                        Debug.Log("here ===================");
+                        
+                    }
+
+                    if (player.currentMana == 0) player.currentMana = player.maxMana;
+
+                    if (daggerTested && healTested && lightningTested)
+                    {
+                        CloseDialogue();
+                        return;
+                    }
                 }
             }
             else
             {
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (Input.GetKeyDown(KeyCode.E))
                 {
                     dialogueManager.DisplayNextSentence();
                 }
@@ -59,9 +94,13 @@ public class MentorTutorial : MonoBehaviour
         }
         else 
         {
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                if (dialogueManager.sentences.Count == 0)
+                if (dialogueManager.sentences.Count == 0 && currentDialogueIndex == 6)
+                {
+                    SceneManager.LoadScene("3Mordon", LoadSceneMode.Single);
+                }
+                else if (dialogueManager.sentences.Count == 0)
                 {
                     CloseDialogue();
                     return;
