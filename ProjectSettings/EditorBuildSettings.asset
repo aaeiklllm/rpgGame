@@ -9,9 +9,15 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: a70555acf0da349a181e6916c223e0f6
   - enabled: 1
-    path: Assets/Scenes/1 - Campfire.unity
+    path: Assets/Scenes/1Campfire.unity
     guid: f7c9169fed1fa4373aab614874bcfcc5
   - enabled: 1
-    path: Assets/Scenes/2 - Tutorial.unity
+    path: Assets/Scenes/2Tutorial.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/3Mentor.unity
+    guid: 68c31f29caf3747458fe8ff40d98807b
+  - enabled: 1
+    path: Assets/Scenes/5Elf.unity
+    guid: cd649d4ab7982467db26b84fbebea83e
   m_configObjects: {}

@@ -7,20 +7,23 @@ public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenuUI;
     public GameObject playerCamera; 
-    private SaveState saveState;
+    public SaveState saveState;
+    public GameObject gameOverUI; 
 
     public bool isPaused = false;
+    private bool isGameOver = false;
 
     void Start()
     {
-        saveState = FindObjectOfType<SaveState>();
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        isGameOver = gameOverUI.activeSelf;
+
+        if (!isGameOver && Input.GetKeyDown(KeyCode.Escape))
         {
             if (isPaused)
                 Resume();
@@ -47,8 +50,6 @@ public class PauseMenu : MonoBehaviour
         isPaused = true;
 
         playerCamera.SetActive(false);
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
     }
 
     public void MainMenu()

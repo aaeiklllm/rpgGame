@@ -5,6 +5,11 @@ public class SaveState : MonoBehaviour
 {
     private const string SceneKey = "SavedScene";
 
+    private void OnApplicationQuit()
+    {
+        SaveCurrentScene();
+    }
+
     public bool isThereSavedScene()
     {
         return PlayerPrefs.HasKey(SceneKey);
@@ -15,6 +20,7 @@ public class SaveState : MonoBehaviour
         string currentScene = SceneManager.GetActiveScene().name;
         PlayerPrefs.SetString(SceneKey, currentScene);
         PlayerPrefs.Save();
+        Debug.Log("Saved scene: " + currentScene);
     }
 
     public void LoadSavedScene()
@@ -22,6 +28,7 @@ public class SaveState : MonoBehaviour
         if (PlayerPrefs.HasKey(SceneKey))
         {
             string savedScene = PlayerPrefs.GetString(SceneKey);
+            Debug.Log("Loaded scene: " + savedScene);
             SceneManager.LoadScene(savedScene);
         }
         else

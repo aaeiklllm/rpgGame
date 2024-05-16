@@ -21,7 +21,7 @@ using UnityEngine;
 public class ProjectileMoveScript : MonoBehaviour {
 
     public bool rotate = false;
-    public float rotateAmount = 45;
+    public float rotateAmount;
     public bool bounce = false;
     public float bounceForce = 10;
     public float speed;

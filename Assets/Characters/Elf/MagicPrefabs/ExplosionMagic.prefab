@@ -48980,7 +48980,6 @@ GameObject:
   - component: {fileID: 363490919539726108}
   - component: {fileID: 6889689289389638085}
   - component: {fileID: 918727077166668244}
-  - component: {fileID: -4105126158125654767}
   m_Layer: 0
   m_Name: ExplosionMagic
   m_TagString: Untagged
@@ -53875,16 +53874,3 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &-4105126158125654767
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8974607921191788350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 228c13f7bd6c9481c91208f58e24a777, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}

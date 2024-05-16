@@ -17,7 +17,7 @@ public class Projectile : MonoBehaviour
         playerIsBlocking = player.isBlocking;
         if (attackCollision) 
         {
-            //Takedamage
+            //Player Takedamage
 
             attackCollision = false;
         }
@@ -25,12 +25,13 @@ public class Projectile : MonoBehaviour
 
   private void OnCollisionEnter(Collision other)
     {
-        // Debug.Log("Player Blocking: " + playerIsBlocking);
+        // Debug.Log("Hit layer: " + LayerMask.LayerToName(other.gameObject.layer));
+        // // Debug.Log("Player Blocking: " + playerIsBlocking);
         if (other.gameObject.layer == LayerMask.NameToLayer("whatIsPlayer"))
         {
             if (!playerIsBlocking)
             {
-                Debug.Log("Player Hit");
+                Debug.Log("Player Hit"); //add code for subtracting player health
                 attackCollision = true;
             }
             // else
