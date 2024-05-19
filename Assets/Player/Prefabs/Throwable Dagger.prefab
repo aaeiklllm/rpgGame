@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3259652786043374914}
   - component: {fileID: 8172013286405189353}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 1064048598748686675}
   - component: {fileID: 4926524795725864350}
   - component: {fileID: 6808210173134623566}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Throwable Dagger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,6 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 4384938473226819129, guid: 9ac29a42d624bd1448d56ce842605502, type: 3}
+  hitboxPrefab: {fileID: 7857621420436161503, guid: 7a7a4572a3e104209939d0fa84f54ab6, type: 3}
   trail: {fileID: 8172013286405189353}
 --- !u!1001 &4527005306524613123
 PrefabInstance:
@@ -223,6 +224,10 @@ PrefabInstance:
     - target: {fileID: 176486, guid: 00565c6238126424599242cffe0ede5b, type: 3}
       propertyPath: m_Name
       value: SM_Wep_Dagger_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 176486, guid: 00565c6238126424599242cffe0ede5b, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 453504, guid: 00565c6238126424599242cffe0ede5b, type: 3}
       propertyPath: m_LocalPosition.x

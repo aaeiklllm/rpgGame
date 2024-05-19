@@ -22,6 +22,8 @@ public class MentorTutorial : MonoBehaviour
     public bool healTested = false;
     public bool lightningTested = false;
 
+    public AudioSource sfxManager;
+
     void Start()
     {
         InteractWithNextDialogueTrigger();
@@ -89,6 +91,8 @@ public class MentorTutorial : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     dialogueManager.DisplayNextSentence();
+                    sfxManager.Play();
+
                 }
             }
         }
@@ -107,6 +111,7 @@ public class MentorTutorial : MonoBehaviour
                 }
 
                 dialogueManager.DisplayNextSentence();
+                sfxManager.Play();
             }
         }
     }
@@ -124,6 +129,8 @@ public class MentorTutorial : MonoBehaviour
             dialogueTriggers[currentDialogueIndex].TriggerDialogue();
             Debug.Log(currentDialogueIndex);
         }
+
+        sfxManager.Play();
 
         waitingForInput = (currentDialogueIndex >= 1 && currentDialogueIndex <= 4);
     }

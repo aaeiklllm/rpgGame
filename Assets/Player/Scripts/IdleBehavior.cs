@@ -20,6 +20,7 @@ public class IdleBehavior : StateMachineBehaviour
         {
             animator.SetTrigger("Attack1");
             ThirdPersonController.instance.slashLeft.Play();
+            ThirdPersonController.instance.sfxManager.PlayOneShot(ThirdPersonController.instance.slash1);
             ThirdPersonController.instance.isAttacking = true;
             ThirdPersonController.instance.InputManager();
             ThirdPersonController.instance.inputReceived = false;

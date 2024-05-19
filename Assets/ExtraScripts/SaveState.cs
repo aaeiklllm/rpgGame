@@ -29,7 +29,7 @@ public class SaveState : MonoBehaviour
         {
             string savedScene = PlayerPrefs.GetString(SceneKey);
             Debug.Log("Loaded scene: " + savedScene);
-            SceneManager.LoadScene(savedScene);
+            SceneManager.LoadSceneAsync(savedScene, LoadSceneMode.Single);
         }
         else
         {

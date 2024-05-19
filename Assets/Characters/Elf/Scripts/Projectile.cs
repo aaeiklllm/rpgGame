@@ -31,7 +31,7 @@ public class Projectile : MonoBehaviour
         {
             if (!playerIsBlocking)
             {
-                Debug.Log("Player Hit"); //add code for subtracting player health
+                // Debug.Log("Player Hit"); //add code for subtracting player health
                 attackCollision = true;
             }
             // else
@@ -39,10 +39,10 @@ public class Projectile : MonoBehaviour
             //     Debug.Log("Player is blocking");
             // }
         }
-        else
-        {
-            Debug.Log("Hit layer: " + LayerMask.LayerToName(other.gameObject.layer));
-        }
+        // else
+        // {
+        //     Debug.Log("Hit layer: " + LayerMask.LayerToName(other.gameObject.layer));
+        // }
     }
 
 

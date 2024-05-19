@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4888261060844250}
   - component: {fileID: 198452337105555460}
   - component: {fileID: 199675206800906828}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Leafs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4871,7 +4871,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4079112889855038}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: vfx_Muzzle_Leafs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4907,7 +4907,7 @@ GameObject:
   - component: {fileID: 4343741061018386}
   - component: {fileID: 198562432846866500}
   - component: {fileID: 199211743335753338}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9607,7 +9607,7 @@ GameObject:
   - component: {fileID: 4393150674547650}
   - component: {fileID: 198867274801017056}
   - component: {fileID: 199563028663596272}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Beam
   m_TagString: Untagged
   m_Icon: {fileID: 0}

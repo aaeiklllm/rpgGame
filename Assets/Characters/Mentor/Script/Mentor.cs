@@ -61,9 +61,17 @@ public class Mentor : MonoBehaviour
     public GameObject mentorShield;
 
     public bool endFight = false;
-
-
     public float endTime;
+
+    public AudioSource mordonSFX;
+
+    public AudioClip mordonBlock;
+    public AudioClip mordonHit;
+    
+    public AudioClip mordonApplause;
+    public AudioClip mordonLaugh;
+
+    private float lastHit = 0;
 
     private void Start()
     {
@@ -100,9 +108,23 @@ public class Mentor : MonoBehaviour
 
         if (endFight) 
         {
-            Vector3 targetDirection = (player.position - transform.position).normalized;
-            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        // Get the target direction
+        Vector3 targetDirection = (player.position - transform.position).normalized;
+
+        // Calculate the target rotation based on the target direction
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+
+        // Extract the y-axis rotation from the target rotation
+        float targetYRotation = targetRotation.eulerAngles.y;
+
+        // Create a new Quaternion for the rotation only around the y-axis
+        Quaternion newYRotation = Quaternion.Euler(0f, targetYRotation, 0f);
+
+        // Apply rotation only around the y-axis
+        Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, newYRotation, rotationSpeed * Time.deltaTime);
+
+        // Apply the new rotation
+        transform.rotation = newRotation;
 
             if (Time.time >= endTime + 4f) nextScene();
         }
@@ -149,7 +171,7 @@ public class Mentor : MonoBehaviour
 
     private void nextScene() 
     {
-        SceneManager.LoadScene("1Campfire", LoadSceneMode.Single);
+        SceneManager.LoadScene("4Campfire", LoadSceneMode.Single);
     }
 
     private void Idle()
@@ -161,10 +183,23 @@ public class Mentor : MonoBehaviour
     {
         animator.SetBool("isWalking", true);
 
-        Vector3 directionToPlayer = player.position - transform.position;
-        directionToPlayer.y = 0f; 
-        Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+       // Get the target direction
+        Vector3 targetDirection = (player.position - transform.position).normalized;
+
+        // Calculate the target rotation based on the target direction
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+
+        // Extract the y-axis rotation from the target rotation
+        float targetYRotation = targetRotation.eulerAngles.y;
+
+        // Create a new Quaternion for the rotation only around the y-axis
+        Quaternion newYRotation = Quaternion.Euler(0f, targetYRotation, 0f);
+
+        // Apply rotation only around the y-axis
+        Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, newYRotation, rotationSpeed * Time.deltaTime);
+
+        // Apply the new rotation
+        transform.rotation = newRotation;
 
         //agent.SetDestination(player.position);
 
@@ -177,9 +212,23 @@ public class Mentor : MonoBehaviour
         animator.SetBool("isWalking", false);
         if (playerInAttackRange && !isBlocking)
         {
-            Vector3 targetDirection = (player.position - transform.position).normalized;
-            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        // Get the target direction
+        Vector3 targetDirection = (player.position - transform.position).normalized;
+
+        // Calculate the target rotation based on the target direction
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+
+        // Extract the y-axis rotation from the target rotation
+        float targetYRotation = targetRotation.eulerAngles.y;
+
+        // Create a new Quaternion for the rotation only around the y-axis
+        Quaternion newYRotation = Quaternion.Euler(0f, targetYRotation, 0f);
+
+        // Apply rotation only around the y-axis
+        Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, newYRotation, rotationSpeed * Time.deltaTime);
+
+        // Apply the new rotation
+        transform.rotation = newRotation;
 
             if (!isAttacking && Vector3.Dot(transform.forward, targetDirection) > 0 && Time.time >= lastAttacktime + timeBetweenAttacks)
             {
@@ -224,6 +273,13 @@ public class Mentor : MonoBehaviour
             health -= damage;
             Debug.Log("HP: " + health); 
 
+            if (Time.time > lastHit + 2f) 
+            {
+                mordonSFX.PlayOneShot(mordonHit);
+                lastHit = Time.time;
+            }
+
+
             StartFlash();
 
             if (health <= 0)
@@ -234,6 +290,9 @@ public class Mentor : MonoBehaviour
 
 
                 animator.SetBool("isClapping", true);
+
+                mordonSFX.PlayOneShot(mordonApplause, 0.1f);
+                mordonSFX.PlayOneShot(mordonLaugh);
 
                 //disappear WEAPONS
                 Destroy(mentorSword);
@@ -253,6 +312,7 @@ public class Mentor : MonoBehaviour
         else 
         {
             // PLAY BLOCK SFX
+            mordonSFX.PlayOneShot(mordonBlock, 0.5f);
             Debug.Log("Blocked");
         }
     }

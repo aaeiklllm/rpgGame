@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4555876030346738}
   - component: {fileID: 198030164399805014}
   - component: {fileID: 199445225903120886}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: BlackMark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4871,7 +4871,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4710338527683554}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: vfx_Hit_LaserRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4909,7 +4909,7 @@ GameObject:
   - component: {fileID: 4062644508706304}
   - component: {fileID: 198556524915744372}
   - component: {fileID: 199148938731309420}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9771,7 +9771,7 @@ GameObject:
   - component: {fileID: 4411697384575794}
   - component: {fileID: 198686114394351208}
   - component: {fileID: 199353140030955122}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14471,7 +14471,7 @@ GameObject:
   - component: {fileID: 4134868233158024}
   - component: {fileID: 198270468956119758}
   - component: {fileID: 199358736349462594}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Hit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19333,7 +19333,7 @@ GameObject:
   - component: {fileID: 6853707689262260049}
   - component: {fileID: 6588066218918558853}
   - component: {fileID: 1899059299707742674}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Beam
   m_TagString: Untagged
   m_Icon: {fileID: 0}

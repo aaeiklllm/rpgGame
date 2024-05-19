@@ -21,13 +21,6 @@ public class GuardianFairyHitbox : MonoBehaviour
     void Update()
     {
         playerIsAttacking = player.isAttacking;
-
-        if (attackCollision) 
-        {
-            GuardianFairy.TakeDamage(2);
-
-            attackCollision = false;
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -37,7 +30,21 @@ public class GuardianFairyHitbox : MonoBehaviour
 
         if (other.gameObject.layer == LayerMask.NameToLayer("PlayerAttack") && playerIsAttacking)
         {
-            attackCollision = true;
+            GuardianFairy.TakeDamage(3);
+            player.countHit();
+
+        }
+        
+        if (other.gameObject.layer == LayerMask.NameToLayer("DaggerAttack"))
+        {
+            GuardianFairy.TakeDamage(2);
+
+        }
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("LightningAttack"))
+        {
+            GuardianFairy.TakeDamage(5);
+
         }
 
     }

@@ -19,6 +19,7 @@ public class TransitionOneBehaviour : StateMachineBehaviour
         {
             animator.SetTrigger("Attack2");
             ThirdPersonController.instance.slashDown.Play();
+            ThirdPersonController.instance.sfxManager.PlayOneShot(ThirdPersonController.instance.slash2);
             ThirdPersonController.instance.isAttacking = true;
             ThirdPersonController.instance.InputManager();
             ThirdPersonController.instance.inputReceived = false;

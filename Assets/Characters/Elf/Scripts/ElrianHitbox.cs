@@ -27,13 +27,13 @@ public class ElrianHitbox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(playerIsAttacking);
+        // Debug.Log(playerIsAttacking);
 
         if (other.gameObject.layer == LayerMask.NameToLayer("PlayerAttack") && playerIsAttacking)
         {
             Debug.Log("Mentor hit by Blade");
             elrian.TakeDamage(3);
-            // player.countHit();
+            player.countHit();
         }
 
 

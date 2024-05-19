@@ -594,7 +594,7 @@ MonoBehaviour:
   - {fileID: 7400000, guid: 99b54033dbff64220946d07988113dfc, type: 3}
   - {fileID: 7400000, guid: 9a50a0cdf84ca4507895187e6574b715, type: 3}
   timeBetweenAttacks: 3
-  projectile: {fileID: -2093849230148187643, guid: 61205fb6ad2ce41e4abb4af2d6d2903d, type: 3}
+  projectile: {fileID: 1603392920371116, guid: 61205fb6ad2ce41e4abb4af2d6d2903d, type: 3}
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64

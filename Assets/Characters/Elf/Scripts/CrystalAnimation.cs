@@ -12,12 +12,22 @@ public class CrystalAnimation : MonoBehaviour
     
     private bool playerIsAttacking = false;
     private bool attackCollision = false;
+    public ElrianAttack elrian;
+
+    public AudioSource sfxManager;
+    public AudioClip breakSFX;
     
+
+    void Awake(){
+        destroyedCrystalCount = 0;
+    }
 
     void Start()
     {
         ShatteredCrystal.SetActive(false);
+        
     }
+
 
     void Update()
     {
@@ -27,6 +37,9 @@ public class CrystalAnimation : MonoBehaviour
         {
             Crystal.SetActive(false);
             ShatteredCrystal.SetActive(true);
+            sfxManager.PlayOneShot(breakSFX);
+
+            elrian.TakeDamage(2);
 
             destroyedCrystalCount++;
 
@@ -37,7 +50,7 @@ public class CrystalAnimation : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("PlayerSword") && playerIsAttacking) //layer for destroying crystals only
+        if (other.gameObject.layer == LayerMask.NameToLayer("PlayerAttack") && playerIsAttacking) //layer for destroying crystals only
         {
             attackCollision = true;
         }

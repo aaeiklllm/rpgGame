@@ -9,11 +9,11 @@ public class ElrianAttack : MonoBehaviour
 {
     public Transform player;
     public ThirdPersonController playerPrefab;
-    public Projectile projectile; 
+    public GameObject projectile; 
     private float attackInterval = 4.0f;
     private bool isAttacking = false;
     private bool intervalSet = false;
-    private float health = 25f;
+    public float health = 18f; //10 (5 hits) dagger + 8 crystals
     public GameObject barrier;
     public Animator animator;
 
@@ -26,11 +26,17 @@ public class ElrianAttack : MonoBehaviour
     private bool isFlashing; // Flag to indicate if the character is currently flashing
     public float flashDuration = 0.2f; // Duration of the flash effect in seconds
 
+    public bool grounded = false;
+
+    public AudioSource sfxManager;
+    public AudioClip attackSFX;
+    public AudioClip hitSFX;
 
     void Start() 
     {
         originalMaterials = characterRenderer.materials;   
-         StartCoroutine(AttackPlayer());     
+         //StartCoroutine(AttackPlayer());     
+        // FallToGround();
     }
 
     
@@ -38,22 +44,24 @@ public class ElrianAttack : MonoBehaviour
      void Update()
     {
         int destroyedCount = CrystalAnimation.destroyedCrystalCount; 
-        if (destroyedCount > 3 && !intervalSet)
+        if (destroyedCount > 3 && !intervalSet) //4th crystal
         {
             attackInterval = 2.0f;
             intervalSet = true;
         }
 
-        if (destroyedCount > 2 && !isAttacking)
-        {
-            StartCoroutine(AttackPlayer());
-        }
-
-        if (destroyedCount > 3)
+        if (destroyedCount > 3) //4th crystal
         {
             barrier.SetActive(false);
         }
 
+        if (destroyedCount > 2 && !isAttacking) //3rd crystal
+        {
+            StartCoroutine(AttackPlayer());
+            
+        }
+
+        
         if (isFlashing)
         {
             // Update the flash timer
@@ -77,13 +85,13 @@ public class ElrianAttack : MonoBehaviour
             // Debug.Log(attackInterval);
             transform.LookAt(player);
 
-            ThirdPersonController clonedPlayer = Instantiate(playerPrefab);
+            Vector3 spawnLocation = new Vector3(transform.position.x, transform.position.y + 5f, transform.position.z) + transform.forward * 5f;
 
-            Projectile magicProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
-            magicProjectile.player = clonedPlayer;
+            GameObject magicProjectile = Instantiate(projectile, spawnLocation, Quaternion.identity);
             magicProjectile.transform.LookAt(player.position); // Ensure the projectile faces the player
 
             animator.SetTrigger("castMagic");
+            sfxManager.PlayOneShot(attackSFX);
             StartCoroutine(ResetMagicCastTrigger(3f));
 
             Rigidbody rb = magicProjectile.GetComponent<Rigidbody>();
@@ -91,8 +99,6 @@ public class ElrianAttack : MonoBehaviour
             rb.AddForce(magicProjectile.transform.up * 1f, ForceMode.Impulse);
 
             Destroy(magicProjectile.gameObject, 2f); 
-            Destroy(clonedPlayer.gameObject, 2f);
-            
         }
     }
 
@@ -106,6 +112,7 @@ public class ElrianAttack : MonoBehaviour
     public void TakeDamage(int damage)
     {
         health -= damage;
+        sfxManager.PlayOneShot(hitSFX);
         StartFlash();
 
         Debug.Log("Taking Damage");
@@ -116,11 +123,14 @@ public class ElrianAttack : MonoBehaviour
 
     private void FallToGround()
     {
+        playerPrefab.currentHealth = 25;
         StartCoroutine(FallAnimation());
     }
 
     private IEnumerator FallAnimation()
     {
+        Invoke("LoadCampfireScene", 7f);
+
         float animationDuration = 2f;
 
         Vector3 initialPosition = transform.position;
@@ -130,7 +140,7 @@ public class ElrianAttack : MonoBehaviour
 
         animator.SetBool("isFalling", true);
 
-        while (elapsedTime < animationDuration)
+        while (!grounded)
         {
             float t = elapsedTime / animationDuration;
             transform.position = Vector3.Lerp(initialPosition, targetPosition, t);
@@ -139,10 +149,16 @@ public class ElrianAttack : MonoBehaviour
         }
 
         animator.SetBool("isFalling", false);
+    }
 
-        transform.position = targetPosition;
+    private void OnTriggerEnter(Collider other)
+    {
+        // Debug.Log(playerIsAttacking);
 
-         // Invoke("LoadCampfireScene", 10f);
+        if (other.gameObject.layer == LayerMask.NameToLayer("whatIsGround"))
+        {
+            grounded = true;
+        }
     }
 
     private void StartFlash()
@@ -182,6 +198,6 @@ public class ElrianAttack : MonoBehaviour
 
     private void LoadCampfireScene()
     {
-        SceneManager.LoadScene(5); //6campfire
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

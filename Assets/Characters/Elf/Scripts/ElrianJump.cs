@@ -20,6 +20,9 @@ public class ElrianJump : MonoBehaviour
 
     public PositionData[] jumpPositions;
 
+    public AudioSource sfxManager;
+    public AudioClip blinkSFX;
+
     void Start()
     {
         transform.position = jumpPositions[currentPositionIndex].position;
@@ -55,6 +58,7 @@ public class ElrianJump : MonoBehaviour
             ActivateMagicEffect(currentPositionIndex);
             ActivateMagicEffect(lastPositionIndex);
 
+            sfxManager.PlayOneShot(blinkSFX);
             transform.position = jumpPositions[currentPositionIndex].position;
             ApplyRotationY(jumpPositions[currentPositionIndex].rotationY);
             

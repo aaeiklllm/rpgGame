@@ -21,7 +21,6 @@ public class PlayerHitboxScript : MonoBehaviour
     void Update()
     {
         mentorIsAttacking = mentor.isAttacking;
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -32,6 +31,5 @@ public class PlayerHitboxScript : MonoBehaviour
             Debug.Log("Hit by Mordon's blade");
             player.takeDamage(3);
         }
-
     }
 }

@@ -17,7 +17,7 @@ public class GuardianFairy : MonoBehaviour
     //attacking
     public float timeBetweenAttacks;
     bool alreadyAttacked;
-    public Projectile projectile;
+    public GameObject projectile;
     private bool isDestroyed = false;
 
     //states
@@ -38,6 +38,10 @@ public class GuardianFairy : MonoBehaviour
     private bool isFlashing; // Flag to indicate if the character is currently flashing
     public float flashDuration = 0.2f; // Duration of the flash effect in seconds
 
+    public AudioSource sfxManager;
+    public AudioClip attackSFX;
+    public AudioClip hitSFX;
+
     private void Awake()
     {
         anim = GetComponent<Animation>();
@@ -46,6 +50,7 @@ public class GuardianFairy : MonoBehaviour
         initialPosition = transform.position;
         initialRotation = transform.rotation;
 
+        if (sfxManager == null) sfxManager = GameObject.Find("AttackSFX").GetComponent<AudioSource>();
         GuardianFairyHitbox hitbox = GetComponent<GuardianFairyHitbox>();
         hitbox.SetGuardianFairy(this);
     }
@@ -105,8 +110,9 @@ public class GuardianFairy : MonoBehaviour
         {
             anim.CrossFade(animationClips[0].name);
 
-            Projectile magicProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
-            magicProjectile.player = playerPrefab;
+            sfxManager.PlayOneShot(attackSFX);
+
+            GameObject magicProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
             magicProjectile.transform.LookAt(player.position); // Ensure the projectile faces the player
 
             Rigidbody rb = magicProjectile.GetComponent<Rigidbody>();
@@ -130,6 +136,9 @@ public class GuardianFairy : MonoBehaviour
     {
         if (!isDestroyed)
         {
+
+            sfxManager.PlayOneShot(hitSFX);
+
             health -= damage;
             Debug.Log("Taking Damage");
             StartFlash();
@@ -166,6 +175,9 @@ public class GuardianFairy : MonoBehaviour
         fairyClone.playerPrefab = playerPrefab;
         fairyClone.fairyPrefab = fairyPrefab;
         fairyClone.characterRenderer = characterRenderer;
+        fairyClone.sfxManager = sfxManager;
+        fairyClone.hitSFX = hitSFX;
+        fairyClone.attackSFX = attackSFX;
 
         Debug.Log("Spawning Fairy");
 

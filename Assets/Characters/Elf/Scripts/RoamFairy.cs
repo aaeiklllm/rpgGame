@@ -7,7 +7,7 @@ public class RoamFairy : MonoBehaviour
 {
     public NavMeshAgent agent;
     public Transform player;
-    private float health = 4f;
+    public float health = 1f;
 
     // animation
     public AnimationClip[] animationClips;
@@ -22,7 +22,7 @@ public class RoamFairy : MonoBehaviour
     public float timeBetweenAttacks;
     bool alreadyAttacked;
     public ThirdPersonController playerPrefab;
-    public Projectile projectile;
+    public GameObject projectile;
     private bool isDestroyed = false;
 
     // States
@@ -43,6 +43,11 @@ public class RoamFairy : MonoBehaviour
     private bool isFlashing; // Flag to indicate if the character is currently flashing
     public float flashDuration = 0.2f; // Duration of the flash effect in seconds
 
+    public AudioSource sfxManager;
+    public AudioClip attackSFX;
+    public AudioClip hitSFX;
+
+
     void Awake()
     {
         anim = GetComponent<Animation>();
@@ -51,6 +56,7 @@ public class RoamFairy : MonoBehaviour
         initialPosition = transform.position;
         initialRotation = transform.rotation;
 
+        if (sfxManager == null) sfxManager = GameObject.Find("AttackSFX").GetComponent<AudioSource>();
         RoamFairyHitbox hitbox = GetComponent<RoamFairyHitbox>();
         hitbox.SetRoamFairy(this);
     }
@@ -141,9 +147,9 @@ public class RoamFairy : MonoBehaviour
         if (!alreadyAttacked)
         {
             anim.CrossFade(animationClips[0].name);
+            sfxManager.PlayOneShot(attackSFX);
 
-            Projectile magicProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
-            magicProjectile.player = playerPrefab;
+            GameObject magicProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
             magicProjectile.transform.LookAt(player.position); 
 
             Rigidbody rb = magicProjectile.GetComponent<Rigidbody>();
@@ -169,11 +175,13 @@ public class RoamFairy : MonoBehaviour
         {
             health -= damage;
             Debug.Log("Taking Damage");
+
+            sfxManager.PlayOneShot(hitSFX);
             StartFlash();
 
             if (health <= 0)
             {
-                StartCoroutine(SpawnFairy(1f));
+                StartCoroutine(SpawnFairy(0.2f));
                 StartCoroutine(DestroyEnemy());
             }
         }
@@ -187,7 +195,6 @@ public class RoamFairy : MonoBehaviour
         {
             isDestroyed = true; // Set isDestroyed flag here to prevent subsequent calls
 
-            Debug.Log("Destroying Enemy 2");
             anim.CrossFade(animationClips[3].name);
             yield return new WaitForSeconds(1.2f);
         
@@ -203,6 +210,9 @@ public class RoamFairy : MonoBehaviour
         fairyClone.playerPrefab = playerPrefab;
         fairyClone.fairyPrefab = fairyPrefab;
         fairyClone.characterRenderer = characterRenderer;
+        fairyClone.sfxManager = sfxManager;
+        fairyClone.hitSFX = hitSFX;
+        fairyClone.attackSFX = attackSFX;
         // anim.CrossFade(animationClips[1].name);
 
         Debug.Log("Spawning Fairy");

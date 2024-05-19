@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 using UnityEngine.ProBuilder;
@@ -18,7 +19,7 @@ namespace StarterAssets
     {
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
-        public float MoveSpeed = 2.0f;
+        public float MoveSpeed = 4.0f;
 
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
@@ -148,7 +149,7 @@ namespace StarterAssets
         public int maxHealth = 25;
         public int currentHealth = 25;
 
-        public int currentMana = 0; // Initial mana
+        public int currentMana = 5; // Initial mana
         public int maxMana = 5; // Maximum mana limit
 
         private int hitCounter = 0; // Counter for tracking hits
@@ -168,6 +169,24 @@ namespace StarterAssets
         public int healAmount = 5;
 
         public GameObject lightningHitbox; 
+
+        public bool isDefeated = false;
+
+
+        [Header("Audio")]
+        public AudioSource sfxManager;
+
+        public AudioClip slash1;
+        public AudioClip slash2; 
+        public AudioClip slash3;
+        public AudioClip healSFX;
+        public AudioClip lightningBlast;
+        public AudioClip barrierBlock;
+
+        public AudioClip takeHitSFX;
+
+        private float lastHit = 0;
+
         
         // NEW CODE -------------------------------------------------------------------------------------------
 
@@ -238,6 +257,11 @@ namespace StarterAssets
                     StopFlash();
                 }
             }
+
+            // if (isDefeated)
+            // {
+            //     SceneManager.LoadScene(0);
+            // }
         }
 
         private void LateUpdate()
@@ -528,7 +552,7 @@ namespace StarterAssets
             hitCounter++; // Increment the hit counter
             if (hitCounter >= hitsPerMana)
             {
-                currentMana++; // Gain 1 mana
+                if (currentMana < maxMana) currentMana++; // Gain 1 mana
                 hitCounter = 0; // Reset hit counter
             }
         }
@@ -557,6 +581,8 @@ namespace StarterAssets
                 // Heal 
                 _animator.SetTrigger("Cast");
                 healFX.Play(true);
+                sfxManager.PlayOneShot(healSFX, 0.2f);
+
 
                 currentMana--;
 
@@ -583,6 +609,7 @@ namespace StarterAssets
                 Debug.Log("blast!");
                 _animator.SetTrigger("Cast");
                 lightning.Play(true);
+                sfxManager.PlayOneShot(lightningBlast);
 
                 GameObject blastHitbox = Instantiate(lightningHitbox, transform.position, Quaternion.identity);
                 Destroy(blastHitbox, 0.25f);
@@ -599,18 +626,25 @@ namespace StarterAssets
                 Debug.Log("HP: " + currentHealth);
 
                 StartFlash();
+                if (Time.time > lastHit + 2f) 
+                {
+                    sfxManager.PlayOneShot(takeHitSFX);
+                    lastHit = Time.time;
 
-                StartFlash();
+                }
+
                 Debug.Log("Character took damage. Current Health: " + currentHealth);
                 if (currentHealth <= 0)
                 {
                     // Defeat
                     Debug.Log("Defeated.");
+                    isDefeated = true;
                 }
             }
             else
             {
                 // PLAY BLOCK SFX
+                sfxManager.PlayOneShot(barrierBlock);
                 Debug.Log("Blocked");
             }
         }

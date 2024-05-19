@@ -23,12 +23,12 @@ TagManager:
   - MordonHitbox
   - EnemyAttack
   - LightningAttack
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - ElrianAttack
+  - RoamFairyAttack
+  - GuardianFairyAttack
+  - MeteorAttack
+  - NPC
+  - Shop
   - 
   - 
   - 

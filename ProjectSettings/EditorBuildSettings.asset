@@ -10,14 +10,21 @@ EditorBuildSettings:
     guid: a70555acf0da349a181e6916c223e0f6
   - enabled: 1
     path: Assets/Scenes/1Campfire.unity
-    guid: f7c9169fed1fa4373aab614874bcfcc5
+    guid: ea83d83ae0471da4c8cbd9132567ae78
   - enabled: 1
     path: Assets/Scenes/2Tutorial.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/3Mentor.unity
-    guid: 68c31f29caf3747458fe8ff40d98807b
+    path: Assets/Scenes/3Mordon.unity
+    guid: a0108409efe0b4860b9c0a2d8a9544f2
+  - enabled: 1
+    path: Assets/Scenes/4Campfire.unity
+    guid: c75231907a6c0481aa0e6a1094822d8a
   - enabled: 1
     path: Assets/Scenes/5Elf.unity
     guid: cd649d4ab7982467db26b84fbebea83e
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/Scenes/6Campfire.unity
+    guid: 83e7c932c137c447d96ea29116823ac2
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}

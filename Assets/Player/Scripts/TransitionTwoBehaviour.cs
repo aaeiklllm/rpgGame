@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class TransitionTwoBehaviour : StateMachineBehaviour
 {
+
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -20,6 +21,8 @@ public class TransitionTwoBehaviour : StateMachineBehaviour
             animator.SetTrigger("Attack3");
             ThirdPersonController.instance.slashLeft.Play();
             ThirdPersonController.instance.slashRight.Play();
+            ThirdPersonController.instance.sfxManager.PlayOneShot(ThirdPersonController.instance.slash2);
+            
             ThirdPersonController.instance.isAttacking = true;
             ThirdPersonController.instance.InputManager();
             ThirdPersonController.instance.inputReceived = false;

@@ -11,6 +11,11 @@ public class NPC : MonoBehaviour
     public DialogueManager dialogueManager;
     public Animator animator;
 
+    public bool dialogueActive = false;
+
+    public AudioSource NPCsfx;
+
+
 
     void Start()
     {
@@ -30,23 +35,28 @@ public class NPC : MonoBehaviour
                 if (!DialogueBox.activeSelf) 
                 {
                     Interaction.SetActive(true);
+                    dialogueActive = false;
                 }
 
-                if (Input.GetKeyDown(KeyCode.E))
+                if (Input.GetKeyDown(KeyCode.E) && !dialogueActive)
                 {
                     DialogueBox.SetActive(true);
                     Interaction.SetActive(false);
-                    InteractWithNPC();   
+                    InteractWithNPC();
+                    dialogueActive = true;
+                    NPCsfx.Play(); //audio clip
                 }
 
-                if (Input.GetKeyDown(KeyCode.Return))
+                if (Input.GetKeyDown(KeyCode.E) && dialogueActive)
                 {
                     if (dialogueManager.sentences.Count == 0)
                     {   
                         DialogueBox.SetActive(false);
                         animator.SetBool("isTalking", false);
+                       
                     }
                    
+                    NPCsfx.Play(); //audio clip
                     dialogueManager.DisplayNextSentence();
                 }
             }
@@ -55,13 +65,15 @@ public class NPC : MonoBehaviour
                 Interaction.SetActive(false);
                 DialogueBox.SetActive(false);
                 animator.SetBool("isTalking", false);
+
+                dialogueActive = false;
             }
         }
     }
 
     void InteractWithNPC()
     {
-        animator.SetBool("isTalking", true);
+        animator.SetBool("isTalking", true);    
         DialogueTrigger dialogueTrigger = GetComponent<DialogueTrigger>();
         dialogueTrigger.TriggerDialogue();   
     }

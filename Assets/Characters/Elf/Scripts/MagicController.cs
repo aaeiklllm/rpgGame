@@ -13,6 +13,9 @@ public class MagicController : MonoBehaviour
     float heightOffset = 10.0f; 
     private float downwardForce = 20f;
 
+    public AudioSource sfxManager;
+    public AudioClip magicSFX;
+
     void Start()
     {
         // StartCoroutine(SpawnMagic()); //testing
@@ -21,7 +24,7 @@ public class MagicController : MonoBehaviour
     void Update()
     {
         int destroyedCount = CrystalAnimation.destroyedCrystalCount; 
-        if (destroyedCount > 1 && !isSpawning)
+        if (destroyedCount > 1 && !isSpawning) //2nd crystal
         {
             StartCoroutine(SpawnMagic());
         }
@@ -48,7 +51,10 @@ public class MagicController : MonoBehaviour
                 Rigidbody rb = magicObject.GetComponent<Rigidbody>();
                 rb.useGravity = true;
                 rb.AddForce(Vector3.down * downwardForce, ForceMode.Impulse);
-                Destroy(magicObject.gameObject, 3f);
+                sfxManager.PlayOneShot(magicSFX);
+
+                Destroy(magicObject.gameObject, 1f);
+                Destroy(magicDesign2.gameObject, 3f);
 
 
             }

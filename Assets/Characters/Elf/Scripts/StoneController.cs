@@ -11,6 +11,9 @@ public class StoneController : MonoBehaviour
     public float interval = 15.0f; // interval of stone spawn 
     private Dictionary<GameObject, Vector3> originalPositions; // store original positions
 
+    public AudioSource sfxManager;
+    public AudioClip RockSFX;
+
     private void Start()
     {
         originalPositions = new Dictionary<GameObject, Vector3>();
@@ -39,6 +42,8 @@ public class StoneController : MonoBehaviour
 
     private void MoveStones()
     {
+        sfxManager.PlayOneShot(RockSFX);
+
         for (int i = 0; i < stones.Length; i++)
         {
             if (i == currentIndex) // move current stone up
